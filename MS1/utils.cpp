@@ -72,7 +72,9 @@ namespace sdds {
 		{
 			getline(cin, line, '\n');
 
-			if (all_of(line.begin(), line.end(), isdigit))
+			auto isdigit = [](char ch) {return std::isdigit(static_cast<unsigned char>(ch)); };
+
+			if (std::all_of(line.begin(), line.end(), [](char c) { return std::isdigit(c); }))
 			{
 				ok = true;
 			}
