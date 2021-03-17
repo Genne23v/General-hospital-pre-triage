@@ -39,7 +39,7 @@ namespace sdds {
 	{
 		string line;
 		istr >> line;
-		regex regEx("^[0-9]{2,3}:[0-9]{2,3}$");
+		regex regEx("^[0-9]\{2,3\}:[0-9]\{2,3\}$");
 
 		if (!regex_match(line.begin(), line.end(), regEx))
 		{
