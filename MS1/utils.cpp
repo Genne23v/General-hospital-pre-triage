@@ -26,6 +26,7 @@ who gave it to you, or from what source you acquired it.
 #include <string>
 #include <cstring>
 #include <algorithm>
+#include <cctype>
 #include "utils.h"
 #include "Time.h"
 using namespace std;
@@ -115,7 +116,7 @@ namespace sdds {
 				{
 					ok = true;
 				}
-				else if (input < min || input > max && showRangeAtError == false)
+				else if ((input < min || input > max) && showRangeAtError == false)
 				{
 					cout << errorMessage;
 					showRangeAtError = true;
