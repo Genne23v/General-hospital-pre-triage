@@ -109,6 +109,8 @@ namespace sdds {
 		{
 			getline(cin, line, '\n');
 
+			auto isdigit = [](char ch) {return std::isdigit(static_cast<unsigned char>(ch)); };
+
 			if (all_of(line.begin(), line.end(), isdigit))
 			{
 				input = stoi(line);
