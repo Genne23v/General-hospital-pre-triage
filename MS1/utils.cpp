@@ -111,7 +111,7 @@ namespace sdds {
 
 			auto isdigit = [](char ch) {return std::isdigit(static_cast<unsigned char>(ch)); };
 
-			if (all_of(line.begin(), line.end(), isdigit))
+			if (std::all_of(line.begin(), line.end(), [](char c) { return std::isdigit(c);}))
 			{
 				input = stoi(line);
 				if (input >= min && input <= max)
