@@ -1,3 +1,9 @@
+/**********************************************************
+* Name: Wonkeun No
+* Student ID: 145095196
+* Seneca email: wno@myseneca.ca
+* Section: NGG
+**********************************************************/
 #ifndef SDDS_UTILS_H_
 #define SDDS_UTILS_H_
 #include <iostream>
@@ -6,6 +12,9 @@ namespace sdds {
                       // which include: "utils.h"
 
    int getTime(); // returns the time of day in minutes
+   int getInt(const char* prompt = nullptr);
+   int getInt(int min, int max, const char* prompt = nullptr, const char* errorMessage = nullptr, bool showRangeAtError = true);
+   char* getcstr(const char* prompt = nullptr, std::istream& istr = std::cin, char delimiter = '\n');
 }
 #endif // !SDDS_UTILS_H_
 

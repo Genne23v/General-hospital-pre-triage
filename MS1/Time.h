@@ -1,3 +1,9 @@
+/**********************************************************
+* Name: Wonkeun No
+* Student ID: 145095196
+* Seneca email: wno@myseneca.ca
+* Section: NGG
+**********************************************************/
 #ifndef SDDS_TIMER_H
 #define SDDS_TIMER_H
 #include <iostream>
