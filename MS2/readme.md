@@ -1,9 +1,6 @@
  # Project: General Hospital Pre-Triage Application
-- [MS1 V1.1 due March 16th](#milestone-1)<br />  
-Updated the [getcstr function signature](#getcstr)<br />
-**Fix for: ms1Tester.cpp:** V1.1 Fixed compiler dependecy issues.
-> If you have used recommended compilers: Visual studio and g++ compiler on Matrix as stated in the project, you have no issues and have no concern.
-- [MS2 N/A]()
+- [MS1 V1.0 due March 16th](#milestone-1)
+- [MS2 V1.0 due March 22nd](#milestone-2)
 - [MS3 N/A]()
 - [MS4 N/A]()
 - [MS5 N/A]()
@@ -224,15 +221,12 @@ last value entered: 20
 ### getcstr()
 ```C++
 char* getcstr(
-   const char* prompt = nullptr,   // User entry prompt
-   std::istream& istr = std::cin,  // the Stream to read from
-   char delimiter = '\n'    // Delimiter to mark the end of data
+   const char* prompt = nullptr // User entry prompt
 );
-
 ```
 Prompts the user for the entry if the prompt argument is not null. 
 
-Receives an unknown size string from the istream object and allocates a dynamic Cstring to the size of the string and copies the value of the string into it. (Make sure null termination is put into account when setting the size)
+Receives an unknown size string from the console and allocates a dynamic Cstring to the size of the string and copies the value of the string into it. 
 
 In the end, it will return the dynamically allocated memory. 
 
@@ -636,5 +630,228 @@ and follow the instructions.
 
 - *2??* is replaced with your subject code
 
+# Milestone 2
+## Menu Module
+Menu class encapsulates a menu and provides selection functionality for the caller program.
+
+```C++
+ class Menu{
+      char* m_text; // holds the menu content dynamically
+      int m_noOfSel;  // holds the number of options displayed in menu content
+      void display()const;
+   public:
+      Menu(const char* MenuContent, int NoOfSelections);
+      virtual ~Menu();
+      int& operator>>(int& Selection);
+      // add safe copying logic
+   };
+```
+
+```C++
+ Menu(const char* MenuContent, int NoOfSelections);
+```
+Dynamically allocates memory to hold the content pointed by **m_text**. Also keeps the number of Selections in **m_noOfSel**.
+```C++
+ ~Menu();
+```
+Deallocates the dynamically allocated memory.
+```Text
+Copy and assignment
+```
+Make sure the Menu can be safely copied but **not** be able to be assigned to another Menu object.
+```Text
+display
+```
+Displays the Menu content and then in a new line, it displays:
+
+```Text
+0- Exit
+<NEWLINE>
+```
+```C++
+int& operator>>(int& Selection);
+```
+The member insertion operator first calls the display function and then receives the user's selection as an integer value using the **getInt()** function in **utils** module. The integer reference **selection** argument is then set to this value and returned.<br />
+Make sure that the entered value is validated as an integer and also the value should be between 0 and **m_noOfSel**.<br />
+If the above conditions are not met, a proper error message should be displayed and re-entry requested(see below)
+
+Assuming that the menu content is set to:```"Tester Options menu:\n1- Option one\n2- Option two\n3- Option three"``` and the number of selections is set to 3 the **operator>>** should run like this:
+```Text
+Tester Options menu:
+1- Option one
+2- Option two
+3- Option three
+0- Exit
+> -1
+Invalid option [0 <= value <= 3]: 4
+Invalid option [0 <= value <= 3]: 2
+```
+
+## Menu Tester program execution sample (menuTester.cpp)
+```Text
+Tester Options menu:
+1- Option one
+2- Option two
+3- Option three
+0- Exit
+> -1
+Invalid option [0 <= value <= 3]: 4
+Invalid option [0 <= value <= 3]: abc
+Bad integer value, try again: 2
+option two selected
+
+Tester Options menu:
+1- Option one
+2- Option two
+3- Option three
+0- Exit
+> 1
+option one selected
+
+Tester Options menu:
+1- Option one
+2- Option two
+3- Option three
+0- Exit
+> 3
+option three selected
+
+Tester Options menu:
+1- Option one
+2- Option two
+3- Option three
+0- Exit
+> 0
+goodbye!
+```
+
+## IOAble interface module
+
+In milestone 1 we have created the utility classes and Time display and calculations.<br />
+Now we need to start to create the core classes of the application.  The diagram below displays the core classes of the application and their relationship.
+
+![Classes](images/classes.png)
+
+Create a class called **IOAble**.  This class is an interface and enforces input and output methods to its derived classes.<br />
+The IOAble class has only 4 pure virtual functions and a virtual empty destructor.
+
+## Pure Virtual Functions:
+### csvWrite
+This pure virtual function is for future comma-separated ostream outputs.
+It receives a reference of an ostream and returns a reference of an ostream. This function is incapable of changing the current object.  
+### csvRead
+This pure virtual function is for future comma-separated istream input.
+It receives a reference of an istream and returns a reference of an istream.
+### write
+This pure virtual function is for future ostream outputs.
+It receives a reference of an ostream and returns a reference of an ostream. This function is incapable of changing the current object.
+### read
+This pure virtual function is for future istream inputs.
+It receives a reference of istream and returns a reference of an istream.
+### virtual destructor
+This class also has an empty virtual destructor.
+
+## Insertion and Extraction helper operator overloads.
+### operator<<
+Overload the insertion operator to be able to insert the information of an IOAble object into ostream using the IOAble::write function.
+### operator>>
+Overload the extraction operator to be able to extract information from an istream into an IOAble object using the IOAble::read function.
+
+## The IOAble tester program. (IOAbleTester.cpp)
+Read and study the tester program and understand how it works.  It is a very good example to show how an interface is used as a base class.  It also can help you in the development of the upcoming milestones.
+
+## IOAbleTester.cpp Execution Sample 
+> Use these data entries for your submission.
+```Text
+defaulting Box
+Getting information of an IOAble box from console:
+Height: 5
+Width: 25
+Display the IOAble box on console:
+**************************************************
+**************************************************
+**************************************************
+**************************************************
+**************************************************
+
+Saving 5,25 in the output file.
+Dynamically allocating a Box and holding it in an IOAble pointer...
+defaulting Box
+Reading dimenstions from file using the IOAlbe pointer
+Dimentions:
+5,7
+What it looks like on screen:
+**************
+**************
+**************
+**************
+**************
+
+Now save it in the file...
+Reading the next dimenstions from file using the IOAble pointer
+Dimentions:
+7,4
+What it looks like on screen:
+********
+********
+********
+********
+********
+********
+********
+
+Save this one in the output file too...
+Close the file and display it...
+boxesOut.txt---------------------
+5,25
+5,7
+7,4
+---------------------------------
+Removing the box from memory using the IOAble pointer...
+Box(7,4) is gone!
+Content of "boxesOut.txt" file
+boxesOut.txt---------------------
+5,25
+5,7
+7,4
+---------------------------------
+Box(5,25) is gone!
+
+```
+
+## ms2Tester program
+
+The MS2 Tester program is a combined prgraom of the Menu Tester and the IOAble Tester programs.
+
+Use the same data in the two tester programs for your submission.
+
+## MS2 Submission and the due date
+Milestone 2 suggested due date is on March 22nd.
+
+> If you would like to successfully complete the project and be on time, try to meet all the due dates of the milestones.
+
+### MS2 Files for submission
+``` Text
+boxes.txt
+Menu.cpp
+Menu.h
+IOAble.cpp
+IOAble.h
+utils.cpp
+utils.h
+Time.cpp  // not used in this milestone, but needed for uitls to compile
+Time.h    // same as above
+ms2Tester.cpp
+```
+
+Upload your source code and the tester program to your `matrix` account. Compile and run your code using the `g++` compiler as shown before and make sure that everything works properly.
+
+Then, run the following command from your account (replace `profname.proflastname` with your professor’s Seneca userid):
+```
+~profname.proflastname/submit 2??/prj/m2
+```
+and follow the instructions.
+
+- *2??* is replaced with your subject code
 
 
