@@ -37,24 +37,35 @@ namespace sdds {
 	}
 	std::istream& Time::read(std::istream& istr)
 	{
-		string line;
-		istr >> line;
-		//regex regEx("^[0-9]{2,3}:[0-9]{2,3}$");
-		std::regex regEx("[0-9][0-9][0-9]*:[0-9][0-9][0-9]*");
-
-		if (!regex_match(line.begin(), line.end(), regEx))
-		{
+		int hour = 0;
+		int min = 0;
+		istr >> hour;
+		if (hour < 0) istr.setstate(ios::failbit);
+		if (istr.get() != ':')
 			istr.setstate(ios::failbit);
+		istr >> min;
+		if (min < 0) istr.setstate(ios::failbit);
+		if (istr) {
+			m_min = (unsigned)min + hour * 60;
 		}
-		else
-		{
-			istringstream iss(line);
-			int hour = 0, min = 0;
-			char rm;
-			
-			iss >> hour >> rm >> min;
-			m_min = (hour * 60) + min;
-		}
+		//string line;
+		//istr >> line;
+		////regex regEx("^[0-9]{2,3}:[0-9]{2,3}$");
+		//std::regex regEx("[0-9][0-9][0-9]*:[0-9][0-9][0-9]*");
+
+		//if (!regex_match(line.begin(), line.end(), regEx))
+		//{
+		//	istr.setstate(ios::failbit);
+		//}
+		//else
+		//{
+		//	istringstream iss(line);
+		//	int hour = 0, min = 0;
+		//	char rm;
+		//	
+		//	iss >> hour >> rm >> min;
+		//	m_min = (hour * 60) + min;
+		//}
 		return istr;
 	}
 
