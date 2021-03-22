@@ -15,6 +15,7 @@ that my professor provided to complete my workshops and assignments.
 -----------------------------------------------------------*/
 #include "Time.h"
 #include "utils.h"
+#include <cmath>
 #include <sstream>
 using namespace std;
 namespace sdds {
