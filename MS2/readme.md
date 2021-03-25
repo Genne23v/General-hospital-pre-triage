@@ -221,16 +221,19 @@ last value entered: 20
 ### getcstr()
 ```C++
 char* getcstr(
-   const char* prompt = nullptr // User entry prompt
+   const char* prompt = nullptr,   // User entry prompt
+   std::istream& istr = std::cin,  // the Stream to read from
+   char delimiter = '\n'    // Delimiter to mark the end of data
 );
+
 ```
 Prompts the user for the entry if the prompt argument is not null. 
 
-Receives an unknown size string from the console and allocates a dynamic Cstring to the size of the string and copies the value of the string into it. 
+Receives an unknown size string from the istream object and allocates a dynamic Cstring to the size of the string and copies the value of the string into it. (Make sure null termination is put into account when setting the size)
 
 In the end, it will return the dynamically allocated memory. 
 
-> Challenge: Implement this without using the C++ **string** class. (Make sure to notify your professor of the implementation in your final project reflection)
+> Optional Challenge: Implement this without using the C++ **string** class. (Make sure to notify your professor of the implementation in your final project reflection)
 
 #### getcstr unit test
 

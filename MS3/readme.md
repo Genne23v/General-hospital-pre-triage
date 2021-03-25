@@ -1,10 +1,7 @@
  # Project: General Hospital Pre-Triage Application
-- [MS1 V1.1 due March 16th](#milestone-1)<br />  
-Updated the [getcstr function signature](#getcstr)<br />
-**Fix for: ms1Tester.cpp:** V1.1 Fixed compiler dependecy issues.
-> If you have used recommended compilers: Visual studio and g++ compiler on Matrix as stated in the project, you have no issues and have no concern.
-- [MS2 N/A]()
-- [MS3 N/A]()
+- [MS1 V1.0 due March 16th](#milestone-1)
+- [MS2 V1.0 due March 22nd](#milestone-2)
+- [MS3 V1.0 due March 27th](#milestone-3)
 - [MS4 N/A]()
 - [MS5 N/A]()
 
@@ -636,5 +633,503 @@ and follow the instructions.
 
 - *2??* is replaced with your subject code
 
+# Milestone 2
+## Menu Module
+Menu class encapsulates a menu and provides selection functionality for the caller program.
+
+```C++
+ class Menu{
+      char* m_text; // holds the menu content dynamically
+      int m_noOfSel;  // holds the number of options displayed in menu content
+      void display()const;
+   public:
+      Menu(const char* MenuContent, int NoOfSelections);
+      virtual ~Menu();
+      int& operator>>(int& Selection);
+      // add safe copying logic
+   };
+```
+
+```C++
+ Menu(const char* MenuContent, int NoOfSelections);
+```
+Dynamically allocates memory to hold the content pointed by **m_text**. Also keeps the number of Selections in **m_noOfSel**.
+```C++
+ ~Menu();
+```
+Deallocates the dynamically allocated memory.
+```Text
+Copy and assignment
+```
+Make sure the Menu can be safely copied but **not** be able to be assigned to another Menu object.
+```Text
+display
+```
+Displays the Menu content and then in a new line, it displays:
+
+```Text
+0- Exit
+<NEWLINE>
+```
+```C++
+int& operator>>(int& Selection);
+```
+The member insertion operator first calls the display function and then receives the user's selection as an integer value using the **getInt()** function in **utils** module. The integer reference **selection** argument is then set to this value and returned.<br />
+Make sure that the entered value is validated as an integer and also the value should be between 0 and **m_noOfSel**.<br />
+If the above conditions are not met, a proper error message should be displayed and re-entry requested(see below)
+
+Assuming that the menu content is set to:```"Tester Options menu:\n1- Option one\n2- Option two\n3- Option three"``` and the number of selections is set to 3 the **operator>>** should run like this:
+```Text
+Tester Options menu:
+1- Option one
+2- Option two
+3- Option three
+0- Exit
+> -1
+Invalid option [0 <= value <= 3]: 4
+Invalid option [0 <= value <= 3]: 2
+```
+
+## Menu Tester program execution sample (menuTester.cpp)
+```Text
+Tester Options menu:
+1- Option one
+2- Option two
+3- Option three
+0- Exit
+> -1
+Invalid option [0 <= value <= 3]: 4
+Invalid option [0 <= value <= 3]: abc
+Bad integer value, try again: 2
+option two selected
+
+Tester Options menu:
+1- Option one
+2- Option two
+3- Option three
+0- Exit
+> 1
+option one selected
+
+Tester Options menu:
+1- Option one
+2- Option two
+3- Option three
+0- Exit
+> 3
+option three selected
+
+Tester Options menu:
+1- Option one
+2- Option two
+3- Option three
+0- Exit
+> 0
+goodbye!
+```
+
+## IOAble interface module
+
+In milestone 1 we have created the utility classes and Time display and calculations.<br />
+Now we need to start to create the core classes of the application.  The diagram below displays the core classes of the application and their relationship.
+
+![Classes](images/classes.png)
+
+Create a class called **IOAble**.  This class is an interface and enforces input and output methods to its derived classes.<br />
+The IOAble class has only 4 pure virtual functions and a virtual empty destructor.
+
+## Pure Virtual Functions:
+### csvWrite
+This pure virtual function is for future comma-separated ostream outputs.
+It receives a reference of an ostream and returns a reference of an ostream. This function is incapable of changing the current object.  
+### csvRead
+This pure virtual function is for future comma-separated istream input.
+It receives a reference of an istream and returns a reference of an istream.
+### write
+This pure virtual function is for future ostream outputs.
+It receives a reference of an ostream and returns a reference of an ostream. This function is incapable of changing the current object.
+### read
+This pure virtual function is for future istream inputs.
+It receives a reference of istream and returns a reference of an istream.
+### virtual destructor
+This class also has an empty virtual destructor.
+
+## Insertion and Extraction helper operator overloads.
+### operator<<
+Overload the insertion operator to be able to insert the information of an IOAble object into ostream using the IOAble::write function.
+### operator>>
+Overload the extraction operator to be able to extract information from an istream into an IOAble object using the IOAble::read function.
+
+## The IOAble tester program. (IOAbleTester.cpp)
+Read and study the tester program and understand how it works.  It is a very good example to show how an interface is used as a base class.  It also can help you in the development of the upcoming milestones.
+
+## IOAbleTester.cpp Execution Sample 
+> Use these data entries for your submission.
+```Text
+defaulting Box
+Getting information of an IOAble box from console:
+Height: 5
+Width: 25
+Display the IOAble box on console:
+**************************************************
+**************************************************
+**************************************************
+**************************************************
+**************************************************
+
+Saving 5,25 in the output file.
+Dynamically allocating a Box and holding it in an IOAble pointer...
+defaulting Box
+Reading dimenstions from file using the IOAlbe pointer
+Dimentions:
+5,7
+What it looks like on screen:
+**************
+**************
+**************
+**************
+**************
+
+Now save it in the file...
+Reading the next dimenstions from file using the IOAble pointer
+Dimentions:
+7,4
+What it looks like on screen:
+********
+********
+********
+********
+********
+********
+********
+
+Save this one in the output file too...
+Close the file and display it...
+boxesOut.txt---------------------
+5,25
+5,7
+7,4
+---------------------------------
+Removing the box from memory using the IOAble pointer...
+Box(7,4) is gone!
+Content of "boxesOut.txt" file
+boxesOut.txt---------------------
+5,25
+5,7
+7,4
+---------------------------------
+Box(5,25) is gone!
+
+```
+
+## ms2Tester program
+
+The MS2 Tester program is a combined prgraom of the Menu Tester and the IOAble Tester programs.
+
+Use the same data in the two tester programs for your submission.
+
+## MS2 Submission and the due date
+Milestone 2 suggested due date is on March 22nd.
+
+> If you would like to successfully complete the project and be on time, try to meet all the due dates of the milestones.
+
+### MS2 Files for submission
+``` Text
+boxes.txt
+Menu.cpp
+Menu.h
+IOAble.cpp
+IOAble.h
+utils.cpp
+utils.h
+Time.cpp  // not used in this milestone, but needed for uitls to compile
+Time.h    // same as above
+ms2Tester.cpp
+```
+
+Upload your source code and the tester program to your `matrix` account. Compile and run your code using the `g++` compiler as shown before and make sure that everything works properly.
+
+Then, run the following command from your account (replace `profname.proflastname` with your professor’s Seneca userid):
+```
+~profname.proflastname/submit 2??/prj/m2
+```
+and follow the instructions.
+
+- *2??* is replaced with your subject code
+
+# Milestone 3
+
+## The Ticket Module (implementation provided)
+
+The Ticket class encapsulates a Ticket to be given to the patients when they arrive. Read the code, understand it, and use the logic and the functionalities throughout the project. 
+
+```C++
+#ifndef SDDS_TICKET_H_
+#define SDDS_TICKET_H_
+#include "Time.h"
+#include "IOAble.h"
+namespace sdds {
+   class Ticket:public IOAble{
+      Time m_time;  
+      int m_number;
+   public:
+      Ticket(int number);
+      operator Time()const;
+      int number()const;
+      void resetTime();
+      std::ostream& csvWrite(std::ostream& ostr)const;
+      std::istream& csvRead(std::istream& istr);
+      std::ostream& write(std::ostream& ostr )const;
+      std::istream& read(std::istream& istr);
+   };
+}
+#endif // !SDDS_TICKET_H_
+```
+### Member Variables
+#### Time m_time;
+The time the Ticket was issued
+#### int m_Number;
+The ticket number; A sequential integer, starting from one and unique for each lineup.
+### Member functions and constructor
+#### Ticket(int number);
+Constructs a Ticket by setting the **m_number** member variable
+#### operator Time()const;
+When Ticket is casted to **Time** it will return the **m_time**
+#### int number()const;
+A query returning the number of the ticket
+#### void resetTime();
+Sets the Ticket time to the current time.
+### Virtual function overrides
+#### csvWrite
+Inserts comma-separated ticket number and time into ostream.
+#### csvRead
+Extracts the ticket number and time in a comma-separated format from istream.
+#### write
+Inserts a ticket into the ostream to be displayed on the console.
+#### read
+Extracts the ticket information from istream.  This function works the same as csvRead. 
+
+## The Patient Module
+
+Create an abstract IOAble patient class (the patient class is a derived class from IOAble).  The patient class is responsible to encapsulate a general patient arriving at the hospital.  In later designs (MS4) the patient class will be inherited into a COVID test patient and a triage patient.  
+
+The following are the mandatory properties of the patient class.
+
+### Member Variables and Objects
+#### the patient name
+A character pointer variable to hold the name of the patient in a Cstring dynamically.
+#### the OHIP number
+An integer to hold the OHIP insurance number (exactly 9 digits) of the patient.
+#### the ticket
+A **Ticket** object to hold the ticket of the patient for the lineup.
+#### the file IO flag
+A Boolean flag. This flag will be set to **true** if the patient object is to be written into or read from a **file** (comma separated value), otherwise, this flag will be set to **false** if the patient object is to be written on or read from the **console**.
+
+### Constructor and destructor
+A patient can be instantiated using a ticket number (an integer) and a file IO flag (a Boolean).  The ticket number is used to initialize the member [ticket object](#the-ticket). The file IO is used to initialize the member [file IO flag](#the-file-io-flag). 
+
+When a patient has instantiated it, If the file IO flag is not provided the default value **"false"** is passed also if the ticket number is not provided the default value **zero (0)** is passed.
+
+### Copying and assignment.
+A patient cannot be copied or assigned to another patient; 
+
+### Destructor
+The destructor of the patient will deallocate the dynamically allocated [patient name Cstring](#the-patient-name).
+
+### Member functions
+#### Pure Virtual Function type()
+Create a pure virtual function called **type** that returns a character and is incapable of modifying the current object.
+In future derived objects, this function will return a single character that identifies the type of the patient (COVID test patient or Triage patient).
+
+#### FileIO query and modifier
+##### fileIO query
+Create a query called fileIO that returns the member [file IO flag](#the-file-io-flag).  This query is incapable of modifying the current object.
+##### fileIO modifier
+Create a modifier member function called fileIO that receives a Boolean value to set the member [fileIO flag](#the-file-io-flag).
+
+#### operator== overloads
+##### character comparison
+Overload the operator== to compare the current object with an incoming single character and return true if the single character is the same as the return value of [the pure virtual type member function](#pure-virtual-function-type).  This operator receives a single character and returns true or false and can not modify the current object.
+##### comparing to another patient
+Overload the operator to compare the current object to another patient and return true if the type of the current patient is the same as the type of the other patient.
+This operator receives a constant reference of a patient object, and returns true or false, and can not modify the current object.
+
+#### setArrivalTime function
+Sets the time of the ticket of the patient to the current time.
+This function neither receives nor returns any value.
+
+#### Time cast operator overload
+If the patient is casted to the Time type it should return the time of the ticket.
+This cast overload can not modify the current object.
+
+#### number
+Create a query function called **number** that returns the number of the ticket.
+This function can not modify the current object.
+
+### pure virtual function overwrites.
+#### csvWrite
+Inserts the following values into the ostream in a comma-separated format.  After the values are inserted it will insert a single "comma", and then call the csvWrite function of the member [ticket object](#the-ticket) and return the ostream.
+
+Here is the sequence of the values inserted into ostream
+```Text
+returned value of type() function
+','
+name of the patient
+','
+OHIP number
+','
+```
+then it will call the csvWrite function of the member [ticket object](#the-ticket).
+
+#### csvRead
+The csvRead function extracts all the values in the same order as the csvWrite function, except for the type.<br />
+- Start with the extraction with the name of the patient up to the comma (**','**) character and dynamically hold it in "[the patient name pointer](#the-patient-name)", dicarding the comma (**','**) delimiter . *Make sure that [the name pointer](#the-patient-name) is deleted before the allocation to guarantee there is no memory leak.* 
+- then extract an integer from istream into the OHIP member variable.
+- discard the delimeter 
+- Finally, end the extraction by calling the csvRead of the member [ticket object](#the-ticket).
+- return the istream reference at the end.
+
+#### write
+Inserts the patient information into the ostream to be displayed on the console.
+- insert  the member [ticket object](#the-ticket into ostream
+- go to newline
+- insert the name up to 25 character (ingnore the rest if more that 25 characters)
+- insert ```", OHIP: "```
+- insert the OHIP number number
+- return the ostream
+
+#### read
+Extracts the ticket information from the console using istream as follows:
+- Prompt: ```"Name: "```
+- Extract the name of the patient up to the newline (**'\n'**) character and dynamically hold it in "[the patient name pointer](#the-patient-name)", dicarding the newline(**'\n'**) delimiter . *Make sure that [the name pointer](#the-patient-name) is deleted before the allocation to guarantee there is no memory leak.* 
+- Prompt: ```"OHIP: "```
+- Extract the 9 digit OHIP number from istream; validate it and make sure it is 9 digits. 
+- return the istream reference at the end.
+
+Execution example:  
+```Text
+Name: John Doe
+OHIP:abc
+Bad integer value, try again: 100
+Invalid OHIP Number, [100000000 <= value <= 999999999]: 123123123
+```
+
+## The tester program.
+Read and study the tester program and understand how it works. 
+
+## ms3Tester.cpp Execution Sample 
+
+```Text
+Enter The following:
+-------------------
+John Doe
+abc
+100
+123123123
+12:34
+-------------------
+Name: John Doe
+OHIP:abc
+Bad integer value, try again: 100
+Invalid OHIP Number, [100000000 <= value <= 999999999]: 123123123
+Enter current time: 12:34
+Sections 1 and 2 should match:
+
+1- Your output on screen:
+Ticket No: 24, Issued at: 12:34
+John Doe, OHIP: 123123123
+2- The output should be :
+Ticket No: 24, Issued at: 12:34
+John Doe, OHIP: 123123123
+
+1- Your comma separated ouput:
+W,John Doe,123123123,24,12:34
+2- comma separated ouput should be:
+W,John Doe,123123123,24,12:34
+
+Enter the following:
+>Jo Lee,234234234,200,12:50
+>Jo Lee,234234234,200,12:50
+Sections 1 and 2 should match:
+
+1- Your output on screen:
+Ticket No: 200, Issued at: 12:50
+Jo Lee, OHIP: 234234234
+2- The output should be:
+Ticket No: 200, Issued at: 12:50
+Jo Lee, OHIP: 234234234
+
+Testing File IO:
+1 -----------------------------------------------
+Ticket No: 10, Issued at: 12:50
+David Mason, OHIP: 111111111
+
+2 -----------------------------------------------
+Ticket No: 11, Issued at: 12:51
+Nick Gilmour, OHIP: 222222222
+
+3 -----------------------------------------------
+Ticket No: 12, Issued at: 12:52
+Roger Wright, OHIP: 333333333
+
+4 -----------------------------------------------
+Ticket No: 13, Issued at: 12:53
+Rick Waters, OHIP: 333333333
+
+5 -----------------------------------------------
+Ticket No: 14, Issued at: 12:54
+A name that is way way wa, OHIP: 444444444
+
+ms3out.csv-----------------------
+W,David Mason,111111111,10,12:50
+W,Nick Gilmour,222222222,11,12:51
+W,Roger Wright,333333333,12,12:52
+W,Rick Waters,333333333,13,12:53
+W,A name that is way way way way way way way way too long,444444444,14,12:54
+---------------------------------
+Testing operator== overloads:
+Success!
+Success!
+Testing Time cast and number:
+Sections 1 and 2 should match:
+
+1- Your output on screen:
+W, Ticket Time: 12:54
+W, Ticket number: 14
+2- The output should be:
+W, Ticket Time: 12:54
+W, Ticket number : 14
+
+```
 
 
+## MS3 Submission and the due date
+Milestone 3 suggested due date is on March 27th.
+
+> If you would like to successfully complete the project and be on time, try to meet all the due dates of the milestones.
+
+### MS2 Files for submission
+``` Text
+ms3.csv
+IOAble.cpp
+IOAble.h
+utils.cpp
+utils.h
+Time.cpp  
+Time.h    
+Ticket.cpp
+Ticket.h
+Patient.cpp
+Patient.h
+ms3Tester.cpp
+```
+
+Upload your source code and the tester program to your `matrix` account. Compile and run your code using the `g++` compiler as shown before and make sure that everything works properly.
+
+Then, run the following command from your account (replace `profname.proflastname` with your professor’s Seneca userid):
+```
+~profname.proflastname/submit 2??/prj/m3
+```
+and follow the instructions.
+
+- *2??* is replaced with your subject code
