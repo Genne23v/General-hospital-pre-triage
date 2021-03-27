@@ -107,7 +107,7 @@ namespace sdds
 		{
 			os << m_name;
 		}
-		os << ", OHIP: ";
+		os << ", OHIP:";
 		os << m_insuranceNum;
 		return os;
 	}
