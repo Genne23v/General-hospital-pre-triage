@@ -1,14 +1,15 @@
 /* Citation and Sources...
-Final Project Milestone 1
+Final Project Milestone 3
 Module: utils
 Filename: utils.cpp
-Version 1.0
+Version 1.2
 Author	Wonkeun No
 Revision History
 -----------------------------------------------------------
 Date      Reason
 2020/3/15  Preliminary release
 2020/3/22  Debugged DMA
+2020/3/26  Debugged DMA
 -----------------------------------------------------------
 I have done all the coding by myself and only copied the code
 that my professor provided to complete my workshops and assignments.
@@ -111,7 +112,7 @@ namespace sdds {
 			}
 			else if ((input < min || input > max) && cin.get() == '\n')
 			{
-				cout << "Invalid OHIP number, [" << min << " <= value <= " << max << "]: ";
+				cout << "Invalid OHIP Number, [" << min << " <= value <= " << max << "]: ";
 			}
 			else if (!input)
 			{
