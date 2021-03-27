@@ -113,6 +113,7 @@ namespace sdds
 	std::istream& Patient::read(std::istream& is)
 	{
 		char temp[100];
+		m_insuranceNum = 0;
 		std::cout << "Name: ";
 		is.getline(temp, 100, '\n');
 		delete[] m_name;
