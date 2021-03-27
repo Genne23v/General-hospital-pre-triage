@@ -107,7 +107,7 @@ namespace sdds
 		{
 			os << m_name;
 		}
-		os << ", OHIP:";
+		os << ", OHIP: ";
 		os << m_insuranceNum;
 		return os;
 	}
@@ -122,7 +122,7 @@ namespace sdds
 		m_name = new char[strlen(temp) + 1];
 		strcpy(m_name, temp);
 		
-		std::cout << "OHIP: ";
+		std::cout << "OHIP:";
 		m_insuranceNum = getInt(100000000, 999999999);
 
 		return is;
