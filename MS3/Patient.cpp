@@ -26,6 +26,7 @@ namespace sdds
 {
 	Patient::Patient(int ticketNumber, bool ioFlag) : Ticket(ticketNumber)
 	{
+		m_name = nullptr;
 		m_ioFlag = ioFlag;
 	}
 	Patient::~Patient()
