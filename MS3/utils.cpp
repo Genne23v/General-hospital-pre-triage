@@ -111,7 +111,7 @@ namespace sdds {
 			}
 			else if ((input < min || input > max) && cin.get() == '\n')
 			{
-				cout << "Invalid option [" << min << " <= value <= " << max << "]: ";
+				cout << "Invalid OHIP number, [" << min << " <= value <= " << max << "]: ";
 			}
 			else if (!input)
 			{
