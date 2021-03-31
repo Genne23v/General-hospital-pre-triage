@@ -74,6 +74,7 @@ namespace sdds {
 			std::cout << "Symptoms: ";
 
 		}
+		is.ignore();
 
 		if (m_symptom != nullptr)
 		{
