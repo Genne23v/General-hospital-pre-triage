@@ -19,72 +19,75 @@ that my professor provided to complete my workshops and assignments.
 #include "TriagePatient.h"
 
 namespace sdds {
-   int nextTriageTicket = 1;
+	int nextTriageTicket = 1;
 
-   TriagePatient::TriagePatient() : Patient(nextTriageTicket)
-   {
-	   nextTriageTicket++;
-   }
-   char TriagePatient::type() const
-   {
-	   return 'T';
-   }
-   std::ostream& TriagePatient::csvWrite(std::ostream& os) const
-   {
-	   Patient::csvWrite(os);
-	   os << ", " << m_symptom;
-	   return os;
-   }
-   std::istream& TriagePatient::csvRead(std::istream& is)
-   {
-	   Patient::csvRead(is);
-	   
-	   nextTriageTicket = Ticket::number() + 1;
-	   return is;
-   }
-   std::ostream& TriagePatient::write(std::ostream& os) const
-   {
-	   if (fileIO())
-	   {
-		   csvWrite(os);
-	   }
-	   else
-	   {
-		   os << "TRIAGE" << std::endl;
-		   Patient::write(os);
-		   os<< std::endl;
-		   os << "Symptoms: " << m_symptom;
-		   os << std::endl;
-	   }
+	TriagePatient::TriagePatient() : Patient(nextTriageTicket)
+	{
+		nextTriageTicket++;
+	}
+	char TriagePatient::type() const
+	{
+		return 'T';
+	}
+	std::ostream& TriagePatient::csvWrite(std::ostream& os) const
+	{
+		Patient::csvWrite(os);
+		os << ", " << m_symptom;
+		return os;
+	}
+	std::istream& TriagePatient::csvRead(std::istream& is)
+	{
+		Patient::csvRead(is);
 
-	   return os;
-   }
-   std::istream& TriagePatient::read(std::istream& is)
-   {
-	   char temp[200] = { '\0' };
+		nextTriageTicket = Ticket::number() + 1;
+		return is;
+	}
+	std::ostream& TriagePatient::write(std::ostream& os) const
+	{
+		if (fileIO())
+		{
+			csvWrite(os);
+		}
+		else
+		{
+			os << "TRIAGE" << std::endl;
+			Patient::write(os);
+			os << std::endl;
+			os << "Symptoms: " << m_symptom;
+			os << std::endl;
+		}
 
-	   if (fileIO())
-	   {
-		   csvRead(is);
-	   }
-	   else
-	   {
-		   Patient::read(is);
+		return os;
+	}
+	std::istream& TriagePatient::read(std::istream& is)
+	{
+		char temp[500] = { '\0' };
 
-		   std::cout << "Symptoms: ";
-		   
-	   }
+		if (fileIO())
+		{
+			csvRead(is);
+		}
+		else
+		{
+			Patient::read(is);
 
-	   is.getline(temp, 200, '\n');
-	   delete[] m_symptom;
-	   m_symptom = nullptr;
-	   m_symptom = new char[strlen(temp) + 1];
-	   strcpy(m_symptom, temp);
+			std::cout << "Symptoms: ";
 
-	   return is;
-   }
-   TriagePatient::~TriagePatient()
-   {
-	   delete[] m_symptom;
-   }
+		}
+
+		is.getline(temp, 500, '\n');
+		if (m_symptom != nullptr)
+		{
+			delete[] m_symptom;
+			m_symptom = nullptr;
+			m_symptom = new char[strlen(temp) + 1];
+			strcpy(m_symptom, temp);
+		}
+
+		return is;
+	}
+	TriagePatient::~TriagePatient()
+	{
+		delete[] m_symptom;
+	}
 }
