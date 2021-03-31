@@ -32,7 +32,7 @@ namespace sdds {
 	std::ostream& TriagePatient::csvWrite(std::ostream& os) const
 	{
 		Patient::csvWrite(os);
-		os << ", " << m_symptom;
+		os << "," << m_symptom;
 		return os;
 	}
 	std::istream& TriagePatient::csvRead(std::istream& is)
