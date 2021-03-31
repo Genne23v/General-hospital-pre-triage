@@ -66,13 +66,13 @@ namespace sdds {
 		if (fileIO())
 		{
 			csvRead(is);
+			is.ignore();
 		}
 		else
 		{
 			Patient::read(is);
 
 			std::cout << "Symptoms: ";
-
 		}
 
 		if (m_symptom != nullptr)
@@ -80,10 +80,9 @@ namespace sdds {
 			delete[] m_symptom;
 			m_symptom = nullptr;
 		}
-		is.ignore();
 		is.getline(temp, 500, '\n');
-			m_symptom = new char[strlen(temp) + 1];
-			strcpy(m_symptom, temp);
+		m_symptom = new char[strlen(temp) + 1];
+		strcpy(m_symptom, temp);
 
 		return is;
 	}
