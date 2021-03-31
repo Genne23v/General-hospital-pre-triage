@@ -74,14 +74,14 @@ namespace sdds {
 			std::cout << "Symptoms: ";
 
 		}
-		is.ignore();
 
 		if (m_symptom != nullptr)
 		{
 			delete[] m_symptom;
 			m_symptom = nullptr;
 		}
-			is.getline(temp, 500, '\n');
+		is.ignore();
+		is.getline(temp, 500, '\n');
 			m_symptom = new char[strlen(temp) + 1];
 			strcpy(m_symptom, temp);
 
