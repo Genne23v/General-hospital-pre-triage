@@ -22,7 +22,7 @@ namespace sdds {
 
 	class TriagePatient : public Patient
 	{
-		char* m_symptom;
+		char* m_symptom = nullptr;
 	public:
 		TriagePatient();
 		char type() const;
