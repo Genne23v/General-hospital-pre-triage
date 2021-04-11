@@ -57,6 +57,7 @@ namespace sdds {
             
             m_lineupSize++;
         }
+        delete[] m_lineup;
     }
     void PreTriage::admit()
     {
@@ -158,35 +159,34 @@ namespace sdds {
             while (i < maxNoOfPatients && !fin.eof())
             {
                 bool initialized = false;
-                Patient* P = nullptr;
+                //Patient* P = nullptr;
 
                 getline(fin, type, ',');
 
                 if (type[0] == 'C')
                 {
-                    P = new CovidPatient();
-                    //m_lineup[i] = C;
-                    //m_lineup[i] = new CovidPatient;
+                    //P = new CovidPatient();
+                    m_lineup[i] = new CovidPatient;
                     initialized = true;
                 }
                 else if (type[0] == 'T')
                 {
-                    P = new TriagePatient();
-                    //m_lineup[i] = T;
-                    //m_lineup[i] = new TriagePatient;
+                    //P = new TriagePatient();
+                    m_lineup[i] = new TriagePatient;
                     initialized = true;
                 }
 
-                if (P)
+                if (initialized)
                 {
-                    /*m_lineup[i]->fileIO(true);
-                    m_lineup[i]->csvRead(fin);*/
-                    P->fileIO(true);
+                    m_lineup[i]->fileIO(true);
+                    m_lineup[i]->csvRead(fin);
+                    /*P->fileIO(true);
                     fin >> *P;
                     m_lineup[i] = P;
-                    delete P;
                     P->fileIO(false);
-                    //m_lineup[i]->fileIO(false);
+                    delete P;*/
+                    m_lineup[i]->fileIO(false);
+                    //delete m_lineup[i];
                     m_lineupSize++;
                     i++;
                 }
@@ -243,6 +243,7 @@ namespace sdds {
 
         delete[] m_dataFilename;
         m_dataFilename = nullptr;
+        //delete[] m_lineup;
     }
     
     void PreTriage::run(void)
