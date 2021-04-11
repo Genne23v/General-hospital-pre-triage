@@ -19,7 +19,7 @@ that my professor provided to complete my workshops and assignments.
 #include "Patient.h"
 
 namespace sdds {
-	static int nextTriageTicket = 1;
+	int nextTriageTicket = 1;
 
 	class TriagePatient : public Patient
 	{
