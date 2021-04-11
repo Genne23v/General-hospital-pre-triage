@@ -1,0 +1,6 @@
+* Name: Wonkeun No
+* Student ID: 145095196
+* Seneca email: wno@myseneca.ca
+* Section: NGG
+
+This week's workshop is about how to allocate and deallocate resources when I have base and derived classes. Constructors are more complex than the previous workshops. I need to consider how to access base class data members from derived class. This was hard to understand the structure of classes and accessibility, even const declaration to protect the data. But I feel I handle much more complicating codes than I write C based codes. I need to think about class relationship and how it’s called and destructed. I can imagine it will be much harder when we build a real world application. Also, managing and debugging a large number of data from file is difficult. I clearly feel that I need to know better how to debug a large data based code. It will be a very important skill to improve triage skill and productivity. At the same time, I would like to learn more practical skills during the class. Or previous workshop walkthrough will be great for learning from mistakes. 
