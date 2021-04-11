@@ -147,6 +147,7 @@ namespace sdds {
         string type;
         int i = 0;
         m_lineupSize = 0;
+        //Patient* P;
 
         if (fin.is_open())
         {
@@ -163,12 +164,13 @@ namespace sdds {
 
                 if (type[0] == 'C')
                 {
-                    m_lineup[i] = new CovidPatient();
+                    //P = new CovidPatient;
+                    m_lineup[i] = new CovidPatient;
                     initialized = true;
                 }
                 else if (type[0] == 'T')
                 {
-                    m_lineup[i] = new TriagePatient();
+                    m_lineup[i] = new TriagePatient;
                     initialized = true;
                 }
 
@@ -233,7 +235,7 @@ namespace sdds {
         cout << "done!" << endl;
 
         delete[] m_dataFilename;
-        delete[] m_lineup;
+        m_dataFilename = nullptr;
     }
     
     void PreTriage::run(void)
