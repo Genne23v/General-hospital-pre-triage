@@ -234,6 +234,7 @@ namespace sdds {
         }
         cout << "done!" << endl;
 
+        delete[] m_lineup;
         delete[] m_dataFilename;
         m_dataFilename = nullptr;
     }
