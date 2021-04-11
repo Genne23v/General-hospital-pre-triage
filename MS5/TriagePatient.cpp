@@ -20,6 +20,7 @@ that my professor provided to complete my workshops and assignments.
 
 namespace sdds {
 	
+	int nextTriageTicket = 1;
 	TriagePatient::TriagePatient() : Patient(nextTriageTicket)
 	{
 		nextTriageTicket++;
