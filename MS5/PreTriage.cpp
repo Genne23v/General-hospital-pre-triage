@@ -134,7 +134,7 @@ namespace sdds {
         string temp;
         int i = 0;
 
-        Patient* tempP;
+        //Patient* tempP;
 
         if (fin.is_open())
         {
@@ -151,7 +151,7 @@ namespace sdds {
                     if (temp[0] == 'C')
                     {
                         m_lineup[i] = new CovidPatient();
-                        tempP = new CovidPatient();
+                        //tempP = new CovidPatient();
                     }
                     else if (temp[0] == 'T')
                     {
@@ -168,8 +168,7 @@ namespace sdds {
                     }
                 }
             }
-            cout << endl;
-
+            //cout << endl;
             if (!fin.eof())
             {
                 cout << "Warning: number of records exceeded 100";
@@ -185,8 +184,7 @@ namespace sdds {
         }
     }
 
-    PreTriage::PreTriage(const char* dataFilename) : m_appMenu("General Hospital Pre-Triage Application\n1- Register\n2- Admit", 2), m_pMenu("Select Type of Admittance:\n1- Covid Test\n2- Triage", 2), m_averCovidWait(15), m_averTriageWait(5)
-
+    PreTriage::PreTriage(const char* dataFilename) : m_averCovidWait(15), m_averTriageWait(5), m_appMenu("General Hospital Pre-Triage Application\n1- Register\n2- Admit", 2), m_pMenu("Select Type of Admittance:\n1- Covid Test\n2- Triage", 2)
     {
         if (dataFilename != nullptr)
         {
