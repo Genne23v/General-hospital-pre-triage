@@ -148,10 +148,6 @@ namespace sdds {
         int i = 0;
         m_lineupSize = 0;
         
-        Patient* P= nullptr;
-        
-        
-
         if (fin.is_open())
         {
             fin >> m_averCovidWait;
@@ -162,6 +158,7 @@ namespace sdds {
             while (i < maxNoOfPatients && !fin.eof())
             {
                 bool initialized = false;
+                Patient* P = nullptr;
 
                 getline(fin, type, ',');
 
@@ -187,6 +184,7 @@ namespace sdds {
                     P->fileIO(true);
                     fin >> *P;
                     m_lineup[i] = P;
+                    delete P;
                     P->fileIO(false);
                     //m_lineup[i]->fileIO(false);
                     m_lineupSize++;
