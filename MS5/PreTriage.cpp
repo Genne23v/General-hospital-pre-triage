@@ -147,7 +147,10 @@ namespace sdds {
         string type;
         int i = 0;
         m_lineupSize = 0;
-        //Patient* P;
+        
+        Patient* P= nullptr;
+        
+        
 
         if (fin.is_open())
         {
@@ -164,22 +167,28 @@ namespace sdds {
 
                 if (type[0] == 'C')
                 {
-                    //P = new CovidPatient;
-                    m_lineup[i] = new CovidPatient;
+                    P = new CovidPatient();
+                    //m_lineup[i] = C;
+                    //m_lineup[i] = new CovidPatient;
                     initialized = true;
                 }
                 else if (type[0] == 'T')
                 {
-                    m_lineup[i] = new TriagePatient;
+                    P = new TriagePatient();
+                    //m_lineup[i] = T;
+                    //m_lineup[i] = new TriagePatient;
                     initialized = true;
                 }
 
-                if (initialized)
+                if (P)
                 {
-                    m_lineup[i]->fileIO(true);
-                    m_lineup[i]->csvRead(fin);
-
-                    m_lineup[i]->fileIO(false);
+                    /*m_lineup[i]->fileIO(true);
+                    m_lineup[i]->csvRead(fin);*/
+                    P->fileIO(true);
+                    fin >> *P;
+                    m_lineup[i] = P;
+                    P->fileIO(false);
+                    //m_lineup[i]->fileIO(false);
                     m_lineupSize++;
                     i++;
                 }
@@ -234,7 +243,6 @@ namespace sdds {
         }
         cout << "done!" << endl;
 
-        delete m_lineup;
         delete[] m_dataFilename;
         m_dataFilename = nullptr;
     }
