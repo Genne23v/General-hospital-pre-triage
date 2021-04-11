@@ -22,7 +22,7 @@ that my professor provided to complete my workshops and assignments.
 
 namespace sdds 
 {
-	int nextCovidTicket = 1;
+	extern int nextCovidTicket;
 	class CovidPatient : public Patient
 	{
 	public:

@@ -19,7 +19,7 @@ that my professor provided to complete my workshops and assignments.
 
 namespace sdds {
    
-
+	int nextCovidTicket = 1;
    CovidPatient::CovidPatient() : Patient(nextCovidTicket)
    {
 	   nextCovidTicket++;
