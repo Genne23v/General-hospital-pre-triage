@@ -25,7 +25,7 @@ namespace sdds {
     {
         if (m_lineupSize >= maxNoOfPatients)
         {
-            cout << "Line up full" << endl;
+            cout << "Line up full!" << endl;
         }
         else
         {
@@ -45,15 +45,17 @@ namespace sdds {
 
             m_lineup[m_lineupSize]->setArrivalTime();
 
-            cout << "Please enter patient information: ";
-            //FILE IO??
+            cout << "Please enter patient information: " << endl;
+            m_lineup[m_lineupSize]->fileIO(false);
             m_lineup[m_lineupSize]->read(cin);
 
             cout << endl;
             cout << "******************************************" << endl;
-            cout << m_lineup[m_lineupSize] << endl;
+            m_lineup[m_lineupSize]->write(cout);
             cout << "Estimated Wait Time: " << getWaitTime(*m_lineup[m_lineupSize]) << endl;
             cout << "******************************************" << endl << endl;
+            
+            m_lineupSize++;
         }
     }
     void PreTriage::admit()
@@ -74,12 +76,14 @@ namespace sdds {
         }
 
         int firstIndex = indexOfFirstInLine(type);
+        cout << endl;
         cout << "******************************************" << endl;
-        //FILE IO
-        cout << "Calling for " << m_lineup[m_lineupSize]<< endl;
+        m_lineup[firstIndex]->fileIO(false);
+        cout << "Calling for ";
+        m_lineup[firstIndex]->write(cout);
         cout << "******************************************" << endl << endl;
 
-        setAverageWaitTime(*m_lineup[m_lineupSize]);
+        setAverageWaitTime(*m_lineup[firstIndex]);
         removePatientFromLineup(firstIndex);
 
     }
@@ -89,11 +93,11 @@ namespace sdds {
 
         if (p.type() == 'C')
         {
-            estimatedWait = m_averCovidWait * (unsigned)nextCovidTicket;
+            estimatedWait = m_averCovidWait * (unsigned)(p.number()-1);
         }
         else if (p.type() == 'T')
         {
-            estimatedWait = m_averTriageWait * (unsigned)nextTriageTicket;
+            estimatedWait = m_averTriageWait * (unsigned)(p.number()-1);
         }
 
         return estimatedWait;
@@ -101,7 +105,13 @@ namespace sdds {
     void PreTriage::setAverageWaitTime(const Patient& p)
     {
         Time currentTime;
-        m_averCovidWait = (currentTime.setToNow() - Time(p)) + (m_averCovidWait * (unsigned)(p.number() - 1)) / (unsigned)p.number();
+        if (p.type() == 'C')
+        {
+            m_averCovidWait = ((currentTime.setToNow() - Time(p)) + m_averCovidWait * (unsigned)(p.number() - 1)) / (unsigned)p.number();
+        }
+        else if (p.type() == 'T') {
+            m_averTriageWait = ((currentTime.setToNow() - Time(p)) + m_averTriageWait * (unsigned)(p.number() - 1)) / (unsigned)p.number();
+        }
     }
     void PreTriage::removePatientFromLineup(int index)
     {
@@ -112,29 +122,31 @@ namespace sdds {
     {
         bool found = false;
         int i = 0;
-        while (found)
+        int index = 0;
+        do
         {
             if (m_lineup[i]->type() == type)
             {
                 found = true;
+                index = i;
             }
             i++;
-        }
+        } while (!found);
+
         if (found == false)
         {
-            i = -1;
+            index = -1;
         }
-        return i;
+        return index;
     }
     void PreTriage::load()
     {
         cout << "Loading data..." << endl;
 
         ifstream fin(m_dataFilename);
-        string temp;
+        string type;
         int i = 0;
-
-        //Patient* tempP;
+        m_lineupSize = 0;
 
         if (fin.is_open())
         {
@@ -143,44 +155,47 @@ namespace sdds {
             fin >> m_averTriageWait;
             fin.ignore();
 
-            if (fin.good())
-            { 
-                for (i=0; i< maxNoOfPatients; i++)
-                {
-                    getline(fin, temp, ',');
-                    if (temp[0] == 'C')
-                    {
-                        m_lineup[i] = new CovidPatient();
-                        //tempP = new CovidPatient();
-                    }
-                    else if (temp[0] == 'T')
-                    {
-                        m_lineup[i] = new TriagePatient();
-                    }
-                    
-                    if (m_lineup[i])
-                    {
-                        m_lineup[i] ->fileIO(true);
-                        m_lineup[i]->csvRead(fin);
+            while (i < maxNoOfPatients && !fin.eof())
+            {
+                bool initialized = false;
 
-                        m_lineup[i]->fileIO(false);
-                        m_lineupSize++;
-                    }
+                getline(fin, type, ',');
+
+                if (type[0] == 'C')
+                {
+                    m_lineup[i] = new CovidPatient();
+                    initialized = true;
+                }
+                else if (type[0] == 'T')
+                {
+                    m_lineup[i] = new TriagePatient();
+                    initialized = true;
+                }
+
+                if (initialized)
+                {
+                    m_lineup[i]->fileIO(true);
+                    m_lineup[i]->csvRead(fin);
+
+                    m_lineup[i]->fileIO(false);
+                    m_lineupSize++;
+                    i++;
                 }
             }
-            //cout << endl;
+
             if (!fin.eof())
             {
-                cout << "Warning: number of records exceeded 100";
+                cout << "Warning: number of records exceeded 100" << endl;
             }
             if (i > 0)
             {
-                cout << i + 1 << " Records imported..." << endl;
+                cout << i << " Records imported..." << endl;
             }
             else
             {
                 cout << "No data or bad data file!" << endl;
             }
+            cout << endl;
         }
     }
 
@@ -196,6 +211,42 @@ namespace sdds {
     }
     PreTriage::~PreTriage()
     {
+        //The data file is opened for output, overwriting the content of the file if it already exists.
+        ofstream fout(m_dataFilename);
+        fout << m_averCovidWait << ',' << m_averTriageWait << endl;
+        for (int i = 0; i < m_lineupSize; i++)
+        {
+            m_lineup[i]->fileIO(true);
+            m_lineup[i]->write(fout);
+            fout << endl;
+        }
+
+        cout << "Saving Average Wait Times," << endl;
+        cout << "   COVID Test: " << m_averCovidWait << endl;
+        cout << "   Triage: " << m_averTriageWait << endl;
+        cout << "Saving m_lineup..." << endl;
+        
+        /*ifstream fin(m_dataFilename);
+        int line = 1;
+        if (fin.is_open())
+        {
+            string buffer;
+            fin.ignore(100, '\n');
+            while (!fin.eof())
+            {
+                getline(fin, buffer, '\n');
+                cout << line << "- " << buffer << endl;
+                line++;
+            }
+        }*/
+        for (int i = 0; i < m_lineupSize; i++)
+        {
+            cout << i + 1 << "- ";
+            m_lineup[i]->write(cout);
+            cout << endl;
+        }
+        cout << "done!" << endl;
+
         delete[] m_dataFilename;
     }
     
@@ -203,7 +254,7 @@ namespace sdds {
     {
         int selection=0;
 
-        while (selection != 0)
+        do
         {
             m_appMenu >> selection;
             switch (selection)
@@ -217,7 +268,7 @@ namespace sdds {
             case 0:
                 break;
             }
-        }
+        } while (selection != 0);
 
     }
 }

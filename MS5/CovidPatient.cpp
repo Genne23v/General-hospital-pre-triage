@@ -37,6 +37,7 @@ namespace sdds {
    std::istream& CovidPatient::csvRead(std::istream& is)
    {
 	   Patient::csvRead(is);
+	   is.ignore();
 	   nextCovidTicket = Ticket::number() +1;
 
 	   return is;

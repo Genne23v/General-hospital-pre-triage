@@ -16,6 +16,7 @@ that my professor provided to complete my workshops and assignments.
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <cstring>
+#include <string>
 #include "TriagePatient.h"
 
 namespace sdds {
@@ -38,6 +39,12 @@ namespace sdds {
 	std::istream& TriagePatient::csvRead(std::istream& is)
 	{
 		Patient::csvRead(is);
+		is.ignore();
+
+		string temp;
+		getline(is, temp, '\n');
+		m_symptom = new char[temp.length() + 1];
+		strcpy(m_symptom, temp.c_str());
 
 		nextTriageTicket = Ticket::number() + 1;
 		return is;
