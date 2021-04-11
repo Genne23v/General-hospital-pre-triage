@@ -7,7 +7,7 @@ Author	Wonkeun No
 Revision History
 -----------------------------------------------------------
 Date      Reason
-2020/4/10  Preliminary release
+2020/4/11  Preliminary release
 2020/?/?  Debugged DMA
 -----------------------------------------------------------
 I have done all the coding by myself and only copied the code
@@ -206,12 +206,10 @@ namespace sdds {
             m_dataFilename = new char[strlen(dataFilename) + 1];
             strcpy(m_dataFilename, dataFilename);
         }
-
         load();
     }
     PreTriage::~PreTriage()
     {
-        //The data file is opened for output, overwriting the content of the file if it already exists.
         ofstream fout(m_dataFilename);
         fout << m_averCovidWait << ',' << m_averTriageWait << endl;
         for (int i = 0; i < m_lineupSize; i++)
@@ -226,19 +224,6 @@ namespace sdds {
         cout << "   Triage: " << m_averTriageWait << endl;
         cout << "Saving m_lineup..." << endl;
         
-        /*ifstream fin(m_dataFilename);
-        int line = 1;
-        if (fin.is_open())
-        {
-            string buffer;
-            fin.ignore(100, '\n');
-            while (!fin.eof())
-            {
-                getline(fin, buffer, '\n');
-                cout << line << "- " << buffer << endl;
-                line++;
-            }
-        }*/
         for (int i = 0; i < m_lineupSize; i++)
         {
             cout << i + 1 << "- ";
@@ -248,6 +233,7 @@ namespace sdds {
         cout << "done!" << endl;
 
         delete[] m_dataFilename;
+        delete[] m_lineup;
     }
     
     void PreTriage::run(void)
