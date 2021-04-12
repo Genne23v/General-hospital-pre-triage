@@ -57,7 +57,6 @@ namespace sdds {
             
             m_lineupSize++;
         }
-        delete[] m_lineup;
     }
     void PreTriage::admit()
     {
@@ -226,6 +225,7 @@ namespace sdds {
             m_lineup[i]->fileIO(true);
             m_lineup[i]->write(fout);
             fout << endl;
+            delete m_lineup[i];
         }
 
         cout << "Saving Average Wait Times," << endl;
