@@ -225,7 +225,6 @@ namespace sdds {
             m_lineup[i]->fileIO(true);
             m_lineup[i]->write(fout);
             fout << endl;
-            delete m_lineup[i]; //test
         }
 
         cout << "Saving Average Wait Times," << endl;
@@ -238,6 +237,7 @@ namespace sdds {
             cout << i + 1 << "- ";
             m_lineup[i]->write(cout);
             cout << endl;
+            delete m_lineup[i]; //test
         }
         cout << "done!" << endl;
 
